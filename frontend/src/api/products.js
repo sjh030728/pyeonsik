@@ -1,0 +1,79 @@
+// GET /api/products?category=rice
+// 백엔드(BE1)가 아직 안 켜져 있을 때는 BE2가 만든 실제 목업 데이터를 그대로 보여줍니다.
+// API가 뜨면 자동으로 진짜 서버 응답으로 바뀝니다.
+export const FALLBACK_PRODUCTS = [
+  { id: 'p001', name: '빅삼)정통돈까스삼각', category: 'rice', price: 1700, sodium: 630, kcal: 289, soldOut: false },
+  { id: 'p002', name: '빅삼)밥도둑명란마요삼각', category: 'rice', price: 1800, sodium: 660, kcal: 291, soldOut: false },
+  { id: 'p003', name: '삼)소고기고추장삼각', category: 'rice', price: 1200, sodium: 360, kcal: 168, soldOut: false },
+  { id: 'p004', name: '삼)김치제육삼각', category: 'rice', price: 1400, sodium: 415, kcal: 172, soldOut: false },
+  { id: 'p005', name: '오뚜기) 맛있는 새우볶음밥(용기, 225g)', category: 'rice', price: 5500, sodium: 810, kcal: 455, soldOut: false },
+  { id: 'p006', name: '오뚜기) 진한 쇠고기미역국밥', category: 'rice', price: 4800, sodium: 900, kcal: 350, soldOut: false },
+  { id: 'p007', name: '오뚜기) 맛있는 밥(150g)', category: 'rice', price: 2100, sodium: 15, kcal: 215, soldOut: false },
+  { id: 'p008', name: '풀무원) 새콤달콤 유부초밥(330g)', category: 'rice', price: 6000, sodium: 960, kcal: 577, soldOut: false },
+  { id: 'p009', name: '오뚜기) 컵밥골드치킨마요', category: 'rice', price: 5400, sodium: 850, kcal: 460, soldOut: false },
+  { id: 'p010', name: 'CJ)햇반(210g)', category: 'rice', price: 2400, sodium: 15, kcal: 315, soldOut: false },
+  { id: 'p011', name: '농심) 생생우동왕컵', category: 'noodle', price: 2700, sodium: 1760, kcal: 420, soldOut: false },
+  { id: 'p012', name: '농심) 신라면 큰사발면', category: 'noodle', price: 1600, sodium: 1550, kcal: 500, soldOut: false },
+  { id: 'p013', name: '농심) 신라면로제큰사발', category: 'noodle', price: 1900, sodium: 1220, kcal: 490, soldOut: false },
+  { id: 'p014', name: '팔도) 도시락', category: 'noodle', price: 1200, sodium: 1410, kcal: 390, soldOut: false },
+  { id: 'p015', name: '삼양) 불닭볶음면컵', category: 'noodle', price: 1800, sodium: 950, kcal: 425, soldOut: false },
+  { id: 'p016', name: '오뚜기) 참깨라면 컵', category: 'noodle', price: 2200, sodium: 1590, kcal: 515, soldOut: false },
+  { id: 'p017', name: '오뚜기) 스파게티컵', category: 'noodle', price: 2200, sodium: 780, kcal: 485, soldOut: false },
+  { id: 'p018', name: '오뚜기)진라면매운소컵', category: 'noodle', price: 1300, sodium: 1140, kcal: 280, soldOut: false },
+  { id: 'p019', name: '팔도) 왕뚜껑', category: 'noodle', price: 1600, sodium: 1690, kcal: 475, soldOut: false },
+  { id: 'p020', name: '농심)튀김우동큰사발컵', category: 'noodle', price: 1600, sodium: 1590, kcal: 515, soldOut: false },
+  { id: 'p021', name: '삼립) 발효단팥크림빵', category: 'bread', price: 2000, sodium: 350, kcal: 373, soldOut: false },
+  { id: 'p022', name: '405) 스위트페스트리', category: 'bread', price: 1800, sodium: 200, kcal: 434, soldOut: false },
+  { id: 'p023', name: '삼립) 촉촉치즈후레쉬팡', category: 'bread', price: 2600, sodium: 610, kcal: 432, soldOut: false },
+  { id: 'p024', name: '샌) 햄치즈토마토샌드', category: 'bread', price: 4200, sodium: 780, kcal: 267, soldOut: false },
+  { id: 'p025', name: '샌) 이건가요샌드', category: 'bread', price: 3000, sodium: 550, kcal: 359, soldOut: false },
+  { id: 'p026', name: '샌) 오리지널계란샌드', category: 'bread', price: 2800, sodium: 550, kcal: 340, soldOut: false },
+  { id: 'p027', name: '햄) 더블치즈불고기버거', category: 'bread', price: 3000, sodium: 1090, kcal: 416, soldOut: false },
+  { id: 'p028', name: '햄) 통새우치즈버거', category: 'bread', price: 4500, sodium: 1010, kcal: 459, soldOut: false },
+  { id: 'p029', name: '동원) 양반 쇠고기죽', category: 'side', price: 5200, sodium: 710, kcal: 160, soldOut: false },
+  { id: 'p030', name: '농심) 보노 콘스프(3개입)', category: 'side', price: 4400, sodium: 1170, kcal: 255, soldOut: false },
+  { id: 'p031', name: 'PBICK) 컵국차돌양지미역국', category: 'side', price: 1500, sodium: 780, kcal: 40, soldOut: false },
+  { id: 'p032', name: '비비고) 소고기미역국(500g)', category: 'side', price: 8500, sodium: 1370, kcal: 85, soldOut: false },
+  { id: 'p033', name: '오뚜기) 크림스프(80g)', category: 'side', price: 2800, sodium: 2000, kcal: 340, soldOut: false },
+  { id: 'p034', name: '오뚜기) 쇠고기스프(80g)', category: 'side', price: 2800, sodium: 1680, kcal: 320, soldOut: false },
+  { id: 'p035', name: '젯모닝) 단호박오트죽', category: 'side', price: 3900, sodium: 660, kcal: 263, soldOut: false },
+  { id: 'p036', name: '오뚜기) 옛날쌀떡국용기', category: 'side', price: 3500, sodium: 1200, kcal: 405, soldOut: true },
+  { id: 'p037', name: 'CJ)맥스봉치즈후랑크', category: 'snack', price: 2500, sodium: 490, kcal: 145, soldOut: false },
+  { id: 'p038', name: '롯데) 의성마늘핫바', category: 'snack', price: 2600, sodium: 70, kcal: 200, soldOut: false },
+  { id: 'p039', name: '득템) 뉴닭가슴살훈제', category: 'snack', price: 2200, sodium: 515, kcal: 110, soldOut: false },
+  { id: 'p040', name: '동원) 덴마크스트링치즈', category: 'snack', price: 1700, sodium: 85, kcal: 60, soldOut: false },
+  { id: 'p041', name: '흥생) 반숙계란 2입', category: 'snack', price: 2700, sodium: 210, kcal: 160, soldOut: false },
+  { id: 'p042', name: '롯데) 크런키초콜릿', category: 'snack', price: 1700, sodium: 45, kcal: 190, soldOut: false },
+  { id: 'p043', name: '삼경)하리보스타믹스', category: 'snack', price: 2500, sodium: 10, kcal: 337, soldOut: false },
+  { id: 'p044', name: '해태) 허니버터칩', category: 'snack', price: 1700, sodium: 250, kcal: 335, soldOut: false },
+  { id: 'p045', name: '롯데) 꼬깔콘 고소한맛', category: 'snack', price: 1700, sodium: 301, kcal: 390, soldOut: false },
+  { id: 'p046', name: '오리온) 포카칩 오리지널', category: 'snack', price: 1700, sodium: 253, kcal: 367, soldOut: false },
+  { id: 'p047', name: '농심) 포스틱', category: 'snack', price: 1800, sodium: 530, kcal: 395, soldOut: false },
+  { id: 'p048', name: '코카) 몬스터울트라캔', category: 'drink', price: 2300, sodium: 275, kcal: 14, soldOut: false },
+  { id: 'p049', name: '코카) 코카콜라제로', category: 'drink', price: 2600, sodium: 30, kcal: 0, soldOut: false },
+  { id: 'p050', name: '빙그레) 바나나우유', category: 'drink', price: 1800, sodium: 110, kcal: 208, soldOut: false },
+  { id: 'p051', name: '코카)조지아블랙', category: 'drink', price: 2900, sodium: 83, kcal: 9, soldOut: false },
+  { id: 'p052', name: '서울) 초코우유(300ml)', category: 'drink', price: 1700, sodium: 135, kcal: 205, soldOut: false },
+  { id: 'p053', name: 'del) 빅컵얼음', category: 'drink', price: 1000, sodium: 0, kcal: 0, soldOut: false },
+  { id: 'p054', name: '광동)제주삼다수그린(500ml)', category: 'drink', price: 1100, sodium: 0, kcal: 0, soldOut: false },
+  { id: 'p055', name: '매일)피크닉사과', category: 'drink', price: 1000, sodium: 70, kcal: 84, soldOut: false },
+  { id: 'p056', name: '코카)토레타제로', category: 'drink', price: 2400, sodium: 271, kcal: 4, soldOut: false },
+  { id: 'p057', name: '서울) 흰우유(200ml)', category: 'drink', price: 1200, sodium: 100, kcal: 135, soldOut: false },
+  { id: 'p058', name: '동원) 복숭아제로아이스', category: 'drink', price: 2500, sodium: 20, kcal: 0, soldOut: false },
+  { id: 'p059', name: '이디야) 카페라떼', category: 'drink', price: 3200, sodium: 130, kcal: 180, soldOut: false },
+  { id: 'p060', name: '롯데) 핫식스더킹포스캔', category: 'drink', price: 2500, sodium: 180, kcal: 19, soldOut: true },
+  { id: 'p061', name: '코카)파워에이드(600ml)', category: 'drink', price: 2600, sodium: 318, kcal: 72, soldOut: false },
+  { id: 'p062', name: '동아) 포카리스웨트(620ml)', category: 'drink', price: 2600, sodium: 310, kcal: 155, soldOut: false },
+];
+
+export async function getProducts(category) {
+  const qs = category ? `?category=${encodeURIComponent(category)}` : '';
+  try {
+    const res = await fetch(`/api/products${qs}`);
+    if (!res.ok) throw new Error('상품을 불러오지 못했어요.');
+    return await res.json();
+  } catch (err) {
+    console.warn('[getProducts] API 실패, 임시 데이터로 대체합니다:', err.message);
+    return category ? FALLBACK_PRODUCTS.filter((p) => p.category === category) : FALLBACK_PRODUCTS;
+  }
+}
