@@ -231,7 +231,7 @@ export default function CheckoutPage() {
                 <div style={{ fontSize: 11.5, color: 'var(--text-muted)', marginTop: 6 }}>
                   {type === 'meal'
                     ? '끼니는 이번 주 한 끼 평균에 들어가요.'
-                    : '간식은 한 끼 평균에 넣지 않고 따로 모아서 보여줘요.'}
+                    : '간식은 한 끼 평균에 들어가지 않고, 이번 주 지출에만 더해져요.'}
                 </div>
               </div>
               <div style={{ borderTop: '1px solid var(--border)', paddingTop: 12 }}>
@@ -405,11 +405,16 @@ function PreviewBox({ type, preview, failed }) {
           { label: '한 끼 평균 나트륨', from: before.mealAvg.sodium, to: after.mealAvg.sodium, unit: 'mg' },
           { label: '한 끼 평균 칼로리', from: before.mealAvg.kcal, to: after.mealAvg.kcal, unit: 'kcal' },
         ]
-      : [
+      : // 간식은 한 끼 평균에 안 들어가서, 이번 주 화면에서 실제로 바뀌는 횟수·지출만 보여줘요
+        [
           { label: '이번 주 간식', from: before.snack.count, to: after.snack.count, unit: '회' },
-          { label: '간식 식비 합계', from: before.snack.price, to: after.snack.price, unit: '원' },
-          { label: '간식 나트륨 합계', from: before.snack.sodium, to: after.snack.sodium, unit: 'mg' },
-          { label: '간식 칼로리 합계', from: before.snack.kcal, to: after.snack.kcal, unit: 'kcal' },
+          { label: '간식 지출', from: before.snack.price, to: after.snack.price, unit: '원' },
+          {
+            label: '이번 주 총 지출',
+            from: before.mealAvg.price * before.mealCount + before.snack.price,
+            to: after.mealAvg.price * after.mealCount + after.snack.price,
+            unit: '원',
+          },
         ];
 
   const isFirst = rows[0].from === 0;
@@ -419,14 +424,17 @@ function PreviewBox({ type, preview, failed }) {
     <div style={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 8 }}>
       {isFirst && (
         <div style={{ fontWeight: 700, color: 'var(--green)' }}>
-          이번 주 첫 {type === 'meal' ? '끼니' : '간식'} 기록이에요. 이 기록부터 이번 주 통계가 시작돼요.
+          {type === 'meal'
+            ? '이번 주 첫 끼니 기록이에요. 이 기록부터 이번 주 통계가 시작돼요.'
+            : '이번 주 첫 간식 기록이에요.'}
         </div>
       )}
       {shownRows.map((r) => (
         <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span style={{ color: 'var(--text-soft)' }}>{r.label}</span>
           <span>
-            {!isFirst && (
+            {/* 이전 값이 0이면 화살표 없이 기록 후 값만 */}
+            {r.from !== 0 && (
               <>
                 <span style={{ color: 'var(--text-muted)' }}>{fmt(r.from)}</span>
                 {' → '}
