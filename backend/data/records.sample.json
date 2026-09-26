@@ -1,0 +1,294 @@
+[
+  {
+    "id": "r1790047800000",
+    "date": "2026-09-22",
+    "type": "meal",
+    "timeSlot": "lunch",
+    "items": [
+      {
+        "productId": "p012",
+        "name": "농심) 신라면 큰사발면",
+        "price": 1600,
+        "sodium": 1550,
+        "kcal": 500,
+        "qty": 1
+      },
+      {
+        "productId": "p003",
+        "name": "삼)소고기고추장삼각",
+        "price": 1200,
+        "sodium": 360,
+        "kcal": 168,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 2800,
+      "sodium": 1910,
+      "kcal": 668
+    },
+    "createdAt": "2026-09-22T03:30:00.000Z"
+  },
+  {
+    "id": "r1790080800000",
+    "date": "2026-09-22",
+    "type": "snack",
+    "timeSlot": "late",
+    "items": [
+      {
+        "productId": "p045",
+        "name": "롯데) 꼬깔콘 고소한맛",
+        "price": 1700,
+        "sodium": 301,
+        "kcal": 390,
+        "qty": 1
+      },
+      {
+        "productId": "p049",
+        "name": "코카) 코카콜라제로",
+        "price": 2600,
+        "sodium": 30,
+        "kcal": 0,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 4300,
+      "sodium": 331,
+      "kcal": 390
+    },
+    "createdAt": "2026-09-22T12:40:00.000Z"
+  },
+  {
+    "id": "r1790205600000",
+    "date": "2026-09-24",
+    "type": "meal",
+    "timeSlot": "breakfast",
+    "items": [
+      {
+        "productId": "p023",
+        "name": "삼립) 촉촉치즈후레쉬팡",
+        "price": 2600,
+        "sodium": 610,
+        "kcal": 432,
+        "qty": 1
+      },
+      {
+        "productId": "p051",
+        "name": "코카)조지아블랙",
+        "price": 2900,
+        "sodium": 83,
+        "kcal": 9,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 5500,
+      "sodium": 693,
+      "kcal": 441
+    },
+    "createdAt": "2026-09-23T23:20:00.000Z"
+  },
+  {
+    "id": "r1790330400000",
+    "date": "2026-09-25",
+    "type": "meal",
+    "timeSlot": "dinner",
+    "items": [
+      {
+        "productId": "p009",
+        "name": "오뚜기) 컵밥골드치킨마요",
+        "price": 5400,
+        "sodium": 850,
+        "kcal": 460,
+        "qty": 1
+      },
+      {
+        "productId": "p031",
+        "name": "PBICK) 컵국차돌양지미역국",
+        "price": 1500,
+        "sodium": 780,
+        "kcal": 40,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 6900,
+      "sodium": 1630,
+      "kcal": 500
+    },
+    "createdAt": "2026-09-25T10:00:00.000Z"
+  },
+  {
+    "id": "r1790552400000",
+    "date": "2026-09-28",
+    "type": "meal",
+    "timeSlot": "breakfast",
+    "items": [
+      {
+        "productId": "p025",
+        "name": "샌) 이건가요샌드",
+        "price": 3000,
+        "sodium": 550,
+        "kcal": 359,
+        "qty": 1
+      },
+      {
+        "productId": "p057",
+        "name": "서울) 흰우유(200ml)",
+        "price": 1200,
+        "sodium": 100,
+        "kcal": 135,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 4200,
+      "sodium": 650,
+      "kcal": 494
+    },
+    "createdAt": "2026-09-27T23:40:00.000Z"
+  },
+  {
+    "id": "r1790565600000",
+    "date": "2026-09-28",
+    "type": "meal",
+    "timeSlot": "lunch",
+    "items": [
+      {
+        "productId": "p001",
+        "name": "빅삼)정통돈까스삼각",
+        "price": 1700,
+        "sodium": 630,
+        "kcal": 289,
+        "qty": 1
+      },
+      {
+        "productId": "p004",
+        "name": "삼)김치제육삼각",
+        "price": 1400,
+        "sodium": 415,
+        "kcal": 172,
+        "qty": 2
+      }
+    ],
+    "total": {
+      "price": 4500,
+      "sodium": 1460,
+      "kcal": 633
+    },
+    "createdAt": "2026-09-28T03:20:00.000Z"
+  },
+  {
+    "id": "r1790578800000",
+    "date": "2026-09-28",
+    "type": "snack",
+    "timeSlot": "dinner",
+    "items": [
+      {
+        "productId": "p043",
+        "name": "삼경)하리보스타믹스",
+        "price": 2500,
+        "sodium": 10,
+        "kcal": 337,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 2500,
+      "sodium": 10,
+      "kcal": 337
+    },
+    "createdAt": "2026-09-28T07:00:00.000Z"
+  },
+  {
+    "id": "r1790654400000",
+    "date": "2026-09-29",
+    "type": "meal",
+    "timeSlot": "lunch",
+    "items": [
+      {
+        "productId": "p018",
+        "name": "오뚜기)진라면매운소컵",
+        "price": 1300,
+        "sodium": 1140,
+        "kcal": 280,
+        "qty": 1
+      },
+      {
+        "productId": "p010",
+        "name": "CJ)햇반(210g)",
+        "price": 2400,
+        "sodium": 15,
+        "kcal": 315,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 3700,
+      "sodium": 1155,
+      "kcal": 595
+    },
+    "createdAt": "2026-09-29T04:00:00.000Z"
+  },
+  {
+    "id": "r1790776200000",
+    "date": "2026-09-30",
+    "type": "snack",
+    "timeSlot": "late",
+    "items": [
+      {
+        "productId": "p047",
+        "name": "농심) 포스틱",
+        "price": 1800,
+        "sodium": 530,
+        "kcal": 395,
+        "qty": 1
+      },
+      {
+        "productId": "p048",
+        "name": "코카) 몬스터울트라캔",
+        "price": 2300,
+        "sodium": 275,
+        "kcal": 14,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 4100,
+      "sodium": 805,
+      "kcal": 409
+    },
+    "createdAt": "2026-09-30T13:50:00.000Z"
+  },
+  {
+    "id": "r1790847000000",
+    "date": "2026-10-01",
+    "type": "meal",
+    "timeSlot": "dinner",
+    "items": [
+      {
+        "productId": "p028",
+        "name": "햄) 통새우치즈버거",
+        "price": 4500,
+        "sodium": 1010,
+        "kcal": 459,
+        "qty": 1
+      },
+      {
+        "productId": "p061",
+        "name": "코카)파워에이드(600ml)",
+        "price": 2600,
+        "sodium": 318,
+        "kcal": 72,
+        "qty": 1
+      }
+    ],
+    "total": {
+      "price": 7100,
+      "sodium": 1328,
+      "kcal": 531
+    },
+    "createdAt": "2026-10-01T09:30:00.000Z"
+  }
+]
