@@ -205,7 +205,7 @@ export default function CheckoutPage() {
                     </div>
                     <div style={{ fontSize: 13.5, fontWeight: 700, marginTop: 1 }}>{product.name}</div>
                     <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>
-                      {fmt(product.price * qty)}원 · 나트륨 {fmt(product.sodium * qty)}mg · {fmt(product.kcal * qty)}kcal
+                      {fmt(product.price * qty)}원 · {fmt(product.sodium * qty)}mg · {fmt(product.kcal * qty)}kcal
                     </div>
                   </div>
                   <QtyStepper

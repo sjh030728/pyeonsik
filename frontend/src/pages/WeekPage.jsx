@@ -1,6 +1,6 @@
 // FE2(이나윤) 담당 — 이번 주 현황 화면 (/week)
 // GET /api/stats/week를 화면에 들어올 때마다 새로 불러와서
-// 기록 횟수·지출, 한 끼 평균(식비·나트륨·칼로리)과 목표 비교, 간식 합계, 최근 기록을 보여줍니다.
+// 끼니·간식 지출과 총 지출, 한 끼 평균(식비·나트륨·칼로리)과 목표 비교, 최근 기록을 보여줍니다.
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useGoal } from '../store/useGoal';
@@ -319,22 +319,14 @@ function AverageRow({ metric, value, target, last }) {
   );
 }
 
+// 최근 기록 한 줄: 태그·날짜 → 메뉴 이름 전부(줄바꿈 허용) → 고르기 화면과 같은 형식의 '○원 · ○mg · ○kcal'
 function RecentRow({ record, last }) {
   const date = parseDate(record.date);
   const names = record.items.map((i) => (i.qty > 1 ? `${i.name} x${i.qty}` : i.name));
-  const title = names.length > 2 ? `${names[0]} 외 ${names.length - 1}개` : names.join(' · ');
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        gap: 10,
-        padding: '12px 0',
-        borderBottom: last ? 'none' : '1px solid var(--border)',
-      }}
-    >
-      <div style={{ minWidth: 0 }}>
+    <div style={{ padding: '12px 0', borderBottom: last ? 'none' : '1px solid var(--border)' }}>
+      <div>
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           <span
             className="tag"
@@ -350,23 +342,9 @@ function RecentRow({ record, last }) {
             {date.m}/{date.d} ({date.w})
           </span>
         </div>
-        <div
-          style={{
-            fontSize: 13.5,
-            fontWeight: 700,
-            marginTop: 5,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {title}
-        </div>
-      </div>
-      <div style={{ textAlign: 'right', flex: 'none' }}>
-        <div style={{ fontSize: 13.5, fontWeight: 800 }}>{fmt(record.total.price)}원</div>
-        <div style={{ fontSize: 11.5, color: 'var(--text-muted)', marginTop: 3 }}>
-          {fmt(record.total.sodium)}mg · {fmt(record.total.kcal)}kcal
+        <div style={{ fontSize: 13.5, fontWeight: 700, marginTop: 5, lineHeight: 1.45 }}>{names.join(' · ')}</div>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>
+          {fmt(record.total.price)}원 · {fmt(record.total.sodium)}mg · {fmt(record.total.kcal)}kcal
         </div>
       </div>
     </div>

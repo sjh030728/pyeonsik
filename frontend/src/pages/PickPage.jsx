@@ -1,3 +1,6 @@
+// 고르기 화면 (/) — FE1(전민석) 담당. 아래 디자인 수정은 FE1 동의를 받아 FE2(이나윤)가 반영했어요.
+// ① 목표 예산 ± 삭제(목표 탭에서 설정) ② 목표 대비 지금 담은 양 요약 ③ '다른 조합 추천'은 ↻ 아이콘으로
+// ④ 장바구니 바는 담은 메뉴만 ⑤ 담기 버튼 대신 − 수량 +
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../store/useCart';
@@ -15,20 +18,34 @@ const CATEGORIES = [
   { key: 'drink', label: '음료' },
 ];
 
-const PRICE_STEP = 500;
+const METRICS = [
+  { key: 'price', label: '식비', unit: '원' },
+  { key: 'sodium', label: '나트륨', unit: 'mg' },
+  { key: 'kcal', label: '칼로리', unit: 'kcal' },
+];
 
-function OverLabel({ label, value }) {
+const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+const fmt = (n) => Math.round(n).toLocaleString();
+
+function todayLabel() {
+  const d = new Date();
+  return `${d.getMonth() + 1}월 ${d.getDate()}일 (${WEEKDAYS[d.getDay()]})`;
+}
+
+function OverLabel({ label, value, unit }) {
   if (value <= 0) return null;
   return (
     <span style={{ color: 'var(--danger-text)', fontWeight: 700 }}>
-      {label} +{value.toLocaleString()}
+      {label} {fmt(value)}
+      {unit} 초과
     </span>
   );
 }
 
 export default function PickPage() {
-  const { items, add, clear, total } = useCart();
-  const { goal, setGoal } = useGoal();
+  const { items, add, remove, clear, total } = useCart();
+  const { goal } = useGoal();
   const navigate = useNavigate();
 
   const [category, setCategory] = useState('rice');
@@ -97,31 +114,27 @@ export default function PickPage() {
     addComboToCart(targetCombo);
   };
 
-  const changePrice = (delta) => {
-    setGoal({ ...goal, price: Math.max(0, goal.price + delta) });
-  };
-
-  const overBudget = total.price > goal.price;
-  const overSodium = total.sodium > goal.sodium;
-  const overKcal = total.kcal > goal.kcal;
+  const qtyOf = (productId) => items.find((i) => i.product.id === productId)?.qty ?? 0;
+  const cartTitle =
+    items.length === 0
+      ? ''
+      : items.length === 1
+        ? items[0].product.name
+        : `${items[0].product.name} 외 ${items.length - 1}개`;
 
   return (
     <>
       <div className="page-header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>오늘 뭐 먹지?</div>
-          <span
-            className="tag"
-            style={
-              serverUp
-                ? { background: 'var(--green-bg)', color: 'var(--green)' }
-                : { background: 'var(--chip-bg)', color: 'var(--text-muted)' }
-            }
-          >
-            {serverUp === null ? '서버 확인중…' : serverUp ? '서버 연결됨' : '서버 연결 안 됨(임시 데이터 표시중)'}
-          </span>
+          <div style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600 }}>{todayLabel()}</div>
+          {/* 서버가 꺼졌을 때만 알려줘요 (연결되어 있으면 표시하지 않음) */}
+          {serverUp === false && (
+            <span className="tag" style={{ background: 'var(--chip-bg)', color: 'var(--text-muted)' }}>
+              서버 연결 안 됨(임시 데이터 표시중)
+            </span>
+          )}
         </div>
-        <h1>{goal.price.toLocaleString()}원으로 뭘 먹을까요?</h1>
+        <h1>이번 끼니, 뭘 담을까요?</h1>
       </div>
 
       {/* 이 화면 전체는 스크롤하지 않고, 아래 "음식 리스트 박스"만 내부 스크롤됩니다 */}
@@ -129,34 +142,69 @@ export default function PickPage() {
         className="page"
         style={{ display: 'flex', flexDirection: 'column', gap: 12, overflow: 'hidden', flex: 1, minHeight: 0 }}
       >
-        {/* 가격 설정 */}
-        <div className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>목표 예산</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button
-              onClick={() => changePrice(-PRICE_STEP)}
-              style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--chip-bg)', fontSize: 15 }}
-            >
-              −
-            </button>
-            <div style={{ fontSize: 16, fontWeight: 800, minWidth: 74, textAlign: 'center' }}>
-              {goal.price.toLocaleString()}원
-            </div>
-            <button
-              onClick={() => changePrice(PRICE_STEP)}
-              style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--chip-bg)', fontSize: 15 }}
-            >
-              +
-            </button>
-          </div>
+        {/* ② 목표 대비 지금 담은 양 (항상 보여요) */}
+        <div className="card" style={{ display: 'flex', textAlign: 'center', padding: '12px 8px', flex: 'none' }}>
+          {METRICS.map((m, i) => {
+            const value = total[m.key];
+            const target = goal[m.key];
+            const left = target - value;
+            const over = left < 0;
+            return (
+              <div key={m.key} style={{ flex: 1, borderLeft: i > 0 ? '1px solid var(--border)' : 'none' }}>
+                <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>{m.label}</div>
+                <div style={{ marginTop: 2 }}>
+                  <b style={{ fontSize: 16, fontWeight: 800, color: over ? 'var(--danger-text)' : 'var(--text)' }}>
+                    {fmt(value)}
+                  </b>
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                    {' '}
+                    / {fmt(target)}
+                    {m.unit}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    fontSize: 11.5,
+                    fontWeight: 700,
+                    marginTop: 2,
+                    color: over ? 'var(--danger-text)' : 'var(--green)',
+                  }}
+                >
+                  {over ? `${fmt(-left)}${m.unit} 초과` : `${fmt(left)}${m.unit} 남음`}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* 조합 추천 카드 */}
+        {/* 조합 추천 카드 — ③ '다른 조합 추천'은 오른쪽 위 ↻ 버튼으로 */}
         {combo && (
           <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 'none' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
               <div style={{ fontWeight: 700, fontSize: 14 }}>{combo.name}</div>
-              <div style={{ fontWeight: 800 }}>{combo.totalPrice.toLocaleString()}원</div>
+              <button
+                type="button"
+                aria-label="다른 조합 추천"
+                title="다른 조합 추천"
+                onClick={() => loadCombo(lastComboId)}
+                style={{
+                  width: 30,
+                  height: 30,
+                  flex: 'none',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-soft)',
+                  background: 'var(--chip-bg)',
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
+                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 11a8 8 0 1 0-2.3 5.7" />
+                  <path d="M20 4v7h-7" />
+                </svg>
+              </button>
             </div>
             <div style={{ fontSize: 12.5, color: 'var(--text-soft)' }}>
               {combo.items
@@ -174,50 +222,55 @@ export default function PickPage() {
                   .join(', ')}
               </div>
             )}
+            {/* 아래 상품 목록과 같은 형식: 가격 · 나트륨 · 칼로리 */}
             <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              나트륨 {combo.totalSodium}mg · 칼로리 {combo.totalKcal}kcal
+              {fmt(combo.totalPrice)}원 · {fmt(combo.totalSodium)}mg · {fmt(combo.totalKcal)}kcal
               {!comboFits && (
                 <span style={{ marginLeft: 6 }}>
-                  <OverLabel label="식비" value={comboOver.price} />{' '}
-                  <OverLabel label="나트륨" value={comboOver.sodium} />{' '}
-                  <OverLabel label="칼로리" value={comboOver.kcal} />
+                  <OverLabel label="식비" value={comboOver.price} unit="원" />{' '}
+                  <OverLabel label="나트륨" value={comboOver.sodium} unit="mg" />{' '}
+                  <OverLabel label="칼로리" value={comboOver.kcal} unit="kcal" />
                 </span>
               )}
             </div>
             <button className="btn-primary" onClick={() => handleAddCombo(combo)}>
               이 조합 통째로 담기
             </button>
-            <button className="btn-secondary" style={{ width: '100%' }} onClick={() => loadCombo(lastComboId)}>
-              다른 조합 추천
-            </button>
           </div>
         )}
 
-        {/* 장바구니 요약 박스 — "다른 조합 추천" 바로 아래에 인라인으로 표시 */}
+        {/* ④ 장바구니 바 — 위치는 그대로, 담은 메뉴 + 장바구니 확인 버튼만 */}
         {items.length > 0 && (
           <div
             style={{
               flex: 'none',
-              padding: '12px 18px 16px',
+              padding: '12px 14px 12px 18px',
               background: 'var(--text)',
               borderRadius: 14,
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
+              gap: 10,
             }}
           >
-            <div>
-              <div style={{ color: '#fff', fontSize: 13.5, fontWeight: 700 }}>
-                {total.price.toLocaleString()}원 / 목표 {goal.price.toLocaleString()}원
-                {overBudget && <span style={{ color: '#ff9d8a' }}> (+{(total.price - goal.price).toLocaleString()})</span>}
-              </div>
-              <div style={{ color: '#c9c5ba', fontSize: 11, marginTop: 2 }}>
-                나트륨 {total.sodium}mg{overSodium && <span style={{ color: '#ff9d8a' }}> (+{total.sodium - goal.sodium})</span>}
-                {' · '}
-                칼로리 {total.kcal}kcal{overKcal && <span style={{ color: '#ff9d8a' }}> (+{total.kcal - goal.kcal})</span>}
-              </div>
+            <div
+              style={{
+                color: '#fff',
+                fontSize: 13,
+                fontWeight: 600,
+                minWidth: 0,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {cartTitle}
             </div>
-            <button className="btn-primary" style={{ width: 'auto', padding: '10px 16px' }} onClick={() => navigate('/checkout')}>
+            <button
+              className="btn-primary"
+              style={{ width: 'auto', padding: '10px 14px', flex: 'none' }}
+              onClick={() => navigate('/checkout')}
+            >
               장바구니 확인
             </button>
           </div>
@@ -302,7 +355,7 @@ export default function PickPage() {
           </div>
 
           {/* 상품 목록 — 이 부분만 스크롤 */}
-<div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
             {products.map((p) => (
               <div
                 key={p.id}
@@ -310,25 +363,30 @@ export default function PickPage() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
+                  gap: 10,
                   padding: '12px 4px',
                   borderBottom: '1px solid var(--border)',
                   opacity: p.soldOut ? 0.5 : 1,
                 }}
               >
-                <div>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontSize: 13.5, fontWeight: 700 }}>{p.name}</div>
                   <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>
-                    {p.price.toLocaleString()}원 · 나트륨 {p.sodium}mg · {p.kcal}kcal
+                    {fmt(p.price)}원 · {fmt(p.sodium)}mg · {fmt(p.kcal)}kcal
                   </div>
                 </div>
-                <button
-                  className="btn-secondary"
-                  disabled={p.soldOut}
-                  style={p.soldOut ? { opacity: 0.6, cursor: 'not-allowed' } : undefined}
-                  onClick={() => !p.soldOut && add(p)}
-                >
-                  {p.soldOut ? '품절' : '담기'}
-                </button>
+                {p.soldOut ? (
+                  <span className="btn-secondary" style={{ flex: 'none', opacity: 0.6 }}>
+                    품절
+                  </span>
+                ) : (
+                  <QtyStepper
+                    name={p.name}
+                    qty={qtyOf(p.id)}
+                    onMinus={() => remove(p.id)}
+                    onPlus={() => add(p)}
+                  />
+                )}
               </div>
             ))}
             {products.length === 0 && (
@@ -340,5 +398,54 @@ export default function PickPage() {
         </div>
       </div>
     </>
+  );
+}
+
+// ⑤ 담기 버튼 대신 − 수량 +. 0개면 − 와 테두리를 흐리게 해서 '아직 안 담음'이 구분돼요.
+function QtyStepper({ name, qty, onMinus, onPlus }) {
+  const active = qty > 0;
+  const btn = {
+    width: 30,
+    height: 30,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 16,
+  };
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flex: 'none',
+        border: `1px solid ${active ? 'var(--green)' : 'var(--border)'}`,
+        borderRadius: 10,
+        background: 'var(--card)',
+      }}
+    >
+      <button
+        type="button"
+        aria-label={`${name} 하나 빼기`}
+        disabled={!active}
+        onClick={onMinus}
+        style={{ ...btn, color: active ? 'var(--green)' : 'var(--border)', cursor: active ? 'pointer' : 'default' }}
+      >
+        −
+      </button>
+      <span
+        style={{
+          minWidth: 18,
+          textAlign: 'center',
+          fontSize: 13.5,
+          fontWeight: 700,
+          color: active ? 'var(--text)' : 'var(--text-muted)',
+        }}
+      >
+        {qty}
+      </span>
+      <button type="button" aria-label={`${name} 하나 더 담기`} onClick={onPlus} style={{ ...btn, color: 'var(--green)' }}>
+        +
+      </button>
+    </div>
   );
 }
